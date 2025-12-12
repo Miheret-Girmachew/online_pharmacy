@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  body      String
+  type      String   @default("info") // e.g., 'order_status', 'stock_alert'
+  metadata  Json?    // Stores orderId, tracking links, etc.
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model DeviceToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique // The FCM Token
+  platform  String   @default("web") // android, ios, web
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
