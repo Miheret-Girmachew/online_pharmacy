@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  auth_service:
+    build: .
+    command: sh -c "sleep 10 && python manage.py makemigrations authentication && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 auth_service.wsgi:application"
+    volumes:
+      - .:/app
+      - static_volume:/app/static  # Add this for persisting/serving static files
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
+  static_volume:  # Add this named volume
