@@ -61,7 +61,7 @@ export default function LoginPage() {
           </div>
           <h2 className="text-5xl font-bold mb-6">Manage your health securely.</h2>
           <p className="text-xl text-blue-100 max-w-md">
-            Whether you are ordering prescriptions or managing pharmacy inventory, PharmaClick connects you instantly.
+            Whether you are ordering prescriptions or managing pharmacy inventory, Medivo  connects you instantly.
           </p>
         </div>
         {/* Decorative Circles */}

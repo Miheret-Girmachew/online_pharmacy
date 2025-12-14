@@ -7,8 +7,6 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
   const cartCount = useCartStore(state => state.items.length);
   const pathname = usePathname();
-
-  // Check if we are in Pharmacy mode to change the links
   const isPharmacy = pathname.includes('/pharmacy');
 
   return (
@@ -18,16 +16,24 @@ export default function Navbar() {
           
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center gap-2">
-            <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center text-white font-bold text-lg">Rx</div>
+            <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center text-white font-bold text-lg">M</div>
             <Link href="/" className="text-xl font-bold text-gray-800 tracking-tight">
-              Pharma<span className="text-accent">Click</span>
+              <span className="text-accent">Medivo</span>
             </Link>
           </div>
 
-          {/* Links */}
           <div className="flex items-center space-x-6">
             
-            {!isPharmacy && (
+            {isPharmacy ? (
+              <>
+                 <Link href="/pharmacy/orders" className={`text-sm font-bold transition ${pathname.includes('orders') ? 'text-accent' : 'text-gray-500 hover:text-gray-900'}`}>
+                  Orders
+                </Link>
+                <Link href="/pharmacy/inventory" className={`text-sm font-bold transition ${pathname.includes('inventory') ? 'text-accent' : 'text-gray-500 hover:text-gray-900'}`}>
+                  Inventory
+                </Link>
+              </>
+            ) : (
               <>
                 <Link href="/customer/orders" className="text-gray-500 hover:text-accent font-medium transition">
                   My Orders

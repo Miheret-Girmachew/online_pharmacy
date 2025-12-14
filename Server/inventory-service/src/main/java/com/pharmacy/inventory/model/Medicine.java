@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "medicines")
-@Data // Lombok: Generates Getters, Setters, toString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Medicine {
@@ -21,6 +21,9 @@ public class Medicine {
     private Double price;
     private Integer stock;
     private String pharmacyId;
+
+    @Column(name = "requires_prescription", nullable = false)
+    private Boolean requiresPrescription = false; 
 
     @Version
     private Integer version;

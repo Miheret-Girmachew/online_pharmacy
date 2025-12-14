@@ -52,7 +52,7 @@ export default function RegisterPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
-          <p className="mt-2 text-gray-500">Join PharmaClick today</p>
+          <p className="mt-2 text-gray-500">Join Medivo today</p>
         </div>
 
         {/* ROLE TOGGLE SWITCH */}
