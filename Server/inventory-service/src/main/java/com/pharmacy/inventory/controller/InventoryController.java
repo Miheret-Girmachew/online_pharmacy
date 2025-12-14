@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/inventory/medicines")
@@ -16,34 +17,47 @@ public class InventoryController {
     @Autowired
     private InventoryService service;
 
-    // GET /inventory/medicines?name=param
+    // 1. UPDATED: GET /inventory/medicines?name=param&pharmacyId=123
     @GetMapping
-    public List<Medicine> getMedicines(@RequestParam(required = false) String name) {
-        return service.getMedicines(name);
+    public List<Medicine> getMedicines(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long pharmacyId) {
+        return service.getMedicines(name, pharmacyId);
     }
 
-    // POST /inventory/medicines
+    // 2. NEW: GET /inventory/medicines/{id}
+    @GetMapping("/{id}")
+    public ResponseEntity<Medicine> getMedicineById(@PathVariable Long id) {
+        Optional<Medicine> medicine = service.getMedicineById(id);
+        return medicine.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // 3. POST /inventory/medicines
     @PostMapping
     public ResponseEntity<Medicine> addMedicine(@RequestBody Medicine medicine) {
         Medicine created = service.addMedicine(medicine);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    // PATCH /inventory/medicines/{id}/stock?quantity=-2
+    // 4.PATCH /inventory/medicines/{id}/stock?quantity=50&mode=SET
     @PatchMapping("/{id}/stock")
-    public ResponseEntity<String> updateStock(@PathVariable Long id, @RequestParam int quantity) {
+    public ResponseEntity<String> updateStock(
+            @PathVariable Long id, 
+            @RequestParam int quantity,
+            @RequestParam(defaultValue = "SET") String mode) { 
         try {
-            service.updateStock(id, quantity);
+            service.updateStock(id, quantity, mode);
             return ResponseEntity.ok("Stock updated successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // GET /inventory/medicines/batch?ids=1,2,3
+    // 5. GET /inventory/medicines/batch?ids=1,2,3
     @GetMapping("/batch")
     public ResponseEntity<List<Medicine>> getBatchMedicines(@RequestParam List<Long> ids) {
-        List<Medicine> medicines = service.getMedicinesById(ids);
+        List<Medicine> medicines = service.getMedicinesByIdList(ids);
         return ResponseEntity.ok(medicines);
     }
 }
