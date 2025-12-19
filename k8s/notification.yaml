@@ -14,12 +14,18 @@ spec:
     spec:
       containers:
       - name: notification
-        image: YOUR_DOCKER_USERNAME/notification-service:latest # CHANGE THIS
+        image: miheret217/notification-service:latest 
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         env:
+          # Connection string for Prisma
           - name: DATABASE_URL
-            value: "postgresql://user:pass@db-host:5432/notif_db"
+            value: "postgresql://postgres.ekdjzirbeiakbqpcjhnb:RMfLaxJEkR9kgUYc@aws-1-eu-west-1.pooler.supabase.com:5432/postgres"
+          - name: PORT
+            value: "3000"
+          - name: SERVICE_API_KEY
+            value: "super-secret-notification-token"
 ---
 apiVersion: v1
 kind: Service
@@ -32,3 +38,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 3000
+  type: ClusterIP

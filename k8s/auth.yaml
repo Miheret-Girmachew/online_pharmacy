@@ -14,12 +14,20 @@ spec:
     spec:
       containers:
       - name: auth
-        image: YOUR_DOCKER_USERNAME/auth-service:latest # CHANGE THIS
+        image: miheret217/auth-service:latest 
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
+          # Replace with your actual Auth-specific Supabase URL
           - name: DATABASE_URL
-            value: "postgres://postgres:password@db-service:5432/auth_db" # Example
+            value: "postgres://postgres.ekdjzirbeiakbqpcjhnb:RMfLaxJEkR9kgUYc@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"
+          - name: SECRET_KEY
+            value: "django-insecure-pharmacy-system-key-2024"
+          - name: DEBUG
+            value: "True"
+          - name: ALLOWED_HOSTS
+            value: "*"
 ---
 apiVersion: v1
 kind: Service
@@ -32,3 +40,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
+  type: ClusterIP
