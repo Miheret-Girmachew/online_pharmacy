@@ -1,4 +1,4 @@
-# 💊 PharmaClick: Distributed Online Pharmacy Ecosystem
+# 💊 Medivo: Distributed Online Pharmacy Ecosystem
 
 <p align="center">
 <img src="https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" />
@@ -14,7 +14,7 @@ Transforming fragmented pharmaceutical silos into a unified, high-availability h
 
 ## 📖 Project Overview
 
-PharmaClick is a polyglot microservices web application that bridges physical pharmacies and digital patients. Instead of centralized inventory, PharmaClick uses a distributed aggregation model so patients can query real-time stock across city-wide pharmacy nodes and place secure purchases with prescription handling.
+Medivo is a polyglot microservices web application that bridges physical pharmacies and digital patients. Instead of centralized inventory, Medivo uses a distributed aggregation model so patients can query real-time stock across city-wide pharmacy nodes and place secure purchases with prescription handling.
 
 ---
 
