@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: notification_service
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/notifications
+      REDIS_URL: redis://redis:6379
+      SERVICE_API_KEY: super-secret-key
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: notification_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: notifications
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: notification_redis
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      containers:
+      - name: order
+        image: miheret217/order-service:v4
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+          # --- Database ---
+          - name: DATABASE_URL
+            value: "postgres://postgres.ekdjzirbeiakbqpcjhnb:RMfLaxJEkR9kgUYc@aws-1-eu-west-1.pooler.supabase.com:6543/postgres"
+          
+          # --- Infrastructure ---
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: "kafka-service:9092"
+          - name: REDIS_URL
+            value: "redis://redis-service:6379"
+          
+          # --- Django ---
+          - name: SECRET_KEY
+            value: "order-service-secret-key-999"
+          - name: DEBUG
+            value: "True"
+          - name: ALLOWED_HOSTS
+            value: "*"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order
+  ports:
+    - protocol: TCP
+      port: 80        
+      targetPort: 8000 
+  type: ClusterIP

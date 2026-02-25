@@ -1,0 +1,62 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: medivo-gateway
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "http://localhost:3000"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE, PATCH"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-user-id"
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      # AUTH SERVICE
+      # Matches /auth OR /auth/something
+      - path: /auth(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
+              
+      # INVENTORY SERVICE
+      - path: /inventory(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: inventory-service
+            port:
+              number: 80
+              
+      # ORDER SERVICE
+      - path: /order(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: order-service
+            port:
+              number: 80
+              
+      # PAYMENT SERVICE
+      - path: /payment(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: payment-service
+            port:
+              number: 80
+              
+      # NOTIFICATION SERVICE
+      - path: /notification(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: notification-service
+            port:
+              number: 80
